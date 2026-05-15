@@ -7,21 +7,24 @@ const jwt = require('jsonwebtoken');
 
 
 const globalController = {
-  getstatus: async (req, res) => {
-    try {
-      const authHeader = req.headers.authorization;
-      if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ error: 'Authorization token is required' });
-      }
-      
-  
-      const statuses = await Global.findOne(); // Only one expected
-      res.status(200).json({showPrice:statuses.showPrice});
-    } catch (err) {
-      console.error("Get Status Error:", err);
-      res.status(500).json({ error: "Failed to fetch global status" });
+ getstatus: async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'Authorization token is required' });
     }
-  },
+    let statuses = await Global.findOne();
+    if (!statuses) {
+      statuses = new Global({ showPrice: true });
+      await statuses.save();
+    }
+    res.status(200).json({ showPrice: statuses.showPrice });
+  } catch (err) {
+    console.error("Get Status Error:", err);
+    res.status(500).json({ error: "Failed to fetch global status" });
+  }
+}
+  ,
 setdelivery: async (req, res) => {
   try {
     const authHeader = req.headers.authorization;
@@ -47,16 +50,24 @@ setdelivery: async (req, res) => {
     console.error("Set Status Error:", err);
     res.status(500).json({ error: "Failed to update global status" });
   }
-},
-  getdelivery: async (req, res) => {
-    try {
-      const statuses = await Global.findOne(); // Only one expected
-      res.status(200).json({westbank:statuses.delivery.westbank,jerusalem:statuses.delivery.jerusalem,occupiedinterior:statuses.delivery.occupiedinterior});
-    } catch (err) {
-      console.error("Get Status Error:", err);
-      res.status(500).json({ error: "Failed to fetch global status" });
+},getdelivery: async (req, res) => {
+  try {
+    let statuses = await Global.findOne();
+    if (!statuses) {
+      statuses = new Global({ delivery: { westbank: 0, jerusalem: 0, occupiedinterior: 0 } });
+      await statuses.save();
     }
-  },
+    res.status(200).json({
+      westbank: statuses.delivery.westbank,
+      jerusalem: statuses.delivery.jerusalem,
+      occupiedinterior: statuses.delivery.occupiedinterior
+    });
+  } catch (err) {
+    console.error("Get Status Error:", err);
+    res.status(500).json({ error: "Failed to fetch global status" });
+  }
+}
+  ,
   setstatus: async (req, res) => {
     try {
       const { status } = req.body;
@@ -78,14 +89,34 @@ setdelivery: async (req, res) => {
     }
   },
   getmakeorder: async (req, res) => {
-    try {
-      const statuses = await Global.findOne(); // Only one expected
-      res.status(200).json({allowmakeorder:statuses.allowmakeorder});
-    } catch (err) {
-      console.error("Get Status Error:", err);
-      res.status(500).json({ error: "Failed to fetch global status" });
+  try {
+    let statuses = await Global.findOne();
+    
+    if (!statuses) {
+      statuses = new Global({ allowmakeorder: true, showPrice: true });
+      await statuses.save();
     }
-  },
+    
+    res.status(200).json({ allowmakeorder: statuses.allowmakeorder });
+  } catch (err) {
+    console.error("Get Status Error:", err);
+    res.status(500).json({ error: "Failed to fetch global status" });
+  }
+}getmakeorder: async (req, res) => {
+  try {
+    let statuses = await Global.findOne();
+    
+    if (!statuses) {
+      statuses = new Global({ allowmakeorder: true, showPrice: true });
+      await statuses.save();
+    }
+    
+    res.status(200).json({ allowmakeorder: statuses.allowmakeorder });
+  } catch (err) {
+    console.error("Get Status Error:", err);
+    res.status(500).json({ error: "Failed to fetch global status" });
+  }
+},
   setmakeorder: async (req, res) => {
     try {
       const { status } = req.body;
