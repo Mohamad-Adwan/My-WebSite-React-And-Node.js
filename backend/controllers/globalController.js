@@ -102,20 +102,6 @@ setdelivery: async (req, res) => {
     console.error("Get Status Error:", err);
     res.status(500).json({ error: "Failed to fetch global status" });
   }
-}getmakeorder: async (req, res) => {
-  try {
-    let statuses = await Global.findOne();
-    
-    if (!statuses) {
-      statuses = new Global({ allowmakeorder: true, showPrice: true });
-      await statuses.save();
-    }
-    
-    res.status(200).json({ allowmakeorder: statuses.allowmakeorder });
-  } catch (err) {
-    console.error("Get Status Error:", err);
-    res.status(500).json({ error: "Failed to fetch global status" });
-  }
 },
   setmakeorder: async (req, res) => {
     try {
