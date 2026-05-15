@@ -25,13 +25,19 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 /////////////////here edit
-app.use(cors({
+/*app.use(cors({
 origin:'*', //Allow requests from this origin
 methods: ['GET', 'POST', 'PUT', 'DELETE'],  // Allowed HTTP methods
 credentials: true, // Allow credentials (cookies, authorization headers, etc.)    
 allowedHeaders: ['Content-Type', 'Authorization'] // Allowed headers   
 
 
+}));*/
+app.use(cors({
+  origin: 'https://my-website-react-and-node-js-122.onrender.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json({limit: '10mb'}));
 
