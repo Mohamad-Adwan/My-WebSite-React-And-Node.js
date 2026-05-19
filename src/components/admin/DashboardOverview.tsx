@@ -28,7 +28,7 @@ import { Button } from '@/components/ui/button';
 import { getStatusColor } from './AdminUtils';
 import {  authApi, orderApi, productApi } from '@/services/apiService';
 import { set } from 'date-fns';
-import { parseISO, format, getWeek, getMonth, getYear } from 'date-fns';
+import { parseISO, format, getWeek, getMonth, getYear,isValid  } from 'date-fns';
 interface DashboardOverviewProps {
   stats: Stats;
   displayOrders: Order[];
@@ -93,7 +93,10 @@ const DashboardOverview: React.FC<DashboardOverviewProps> = ({
     const grouped: Record<string, number> = {};
   
     sales.forEach(({ date, amount }) => {
-      const parsedDate = parseISO(date); // assuming date is ISO string
+    if (!date) return;
+    const parsedDate = parseISO(date);
+    if (!isValid(parsedDate)) return;
+    
       let key = '';
   
       switch (timeframe) {
