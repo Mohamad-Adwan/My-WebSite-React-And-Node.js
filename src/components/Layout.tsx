@@ -2,6 +2,7 @@
 import React from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import LiveChat from './LiveChat';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,6 +15,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <main className="flex-grow w-full max-w-screen-2xl mx-auto">
         {children}
       </main>
+      <LiveChat />
       <Footer />
     </div>
   );
