@@ -46,7 +46,8 @@ const ProductsPage = () => {
       fetchItems();
     }, []);
   // Extract unique categories
-  const categories = ['all', ...new Set(Items.map(product => product.category))];
+  //const categories = ['all', ...new Set(Items.map(product => product.category))];
+  const categories = ['all', ...new Set(Items.map(product => product.category).filter(c => c && c !== ''))];
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(Items);
 
   // Apply filters
